@@ -5,11 +5,21 @@ from mcp.client.stdio import stdio_client
 
 
 async def main():
+#     StdioServerParameters(...)
+# é um objeto que diz ao cliente como iniciar o processo do servidor.
+#     command=...
+# indica qual executável vai rodar: o Python da venv do servidor.
+#      args=["../mcp-server/server.py"]
+# informa quais argumentos passar para esse Python, ou seja, qual script executar:
+# o arquivo server.py dentro da pasta mcp-server.
     server_params = StdioServerParameters(
         command="../mcp-server/.venv/bin/python",
         args=["../mcp-server/server.py"]
     )
 
+# abrir a comunicação via stdin/stdout com esse processo, 
+# permitindo que o cliente chame ferramentas do servidor 
+# com session.call_tool(...)
     async with stdio_client(server_params) as (read, write):
         async with ClientSession(read, write) as session:
 
