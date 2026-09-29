@@ -4,7 +4,7 @@ client = OpenAI()
 
 response = client.responses.create(
     model="gpt-5.6-luna",
-    input="Responda apenas: conexão com LLM funcionando"
+    input="Test OK com conexao com OpenAPI"
 )
 
 print(response.output_text)
