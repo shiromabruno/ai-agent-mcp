@@ -31,7 +31,10 @@ async def main():
 
             print("Tools disponíveis:")
             for tool in tools.tools:
-                print(f"- {tool.name}")
+                print("Nome:", tool.name)
+                print("Descrição:", tool.description)
+                print("Schema:", tool.input_schema)
+                print("------------------------")
 
             # Executa uma tool remotamente via MCP
             resultado = await session.call_tool(
