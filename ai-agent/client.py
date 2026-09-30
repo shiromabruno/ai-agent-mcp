@@ -1,4 +1,5 @@
 import asyncio
+import json
 
 from urllib import response
 from openai import OpenAI
@@ -54,22 +55,38 @@ async def main():
             print("Tools disponíveis do openai_tools:")
             print(openai_tools)
 
-            # response = openai_client.responses.create(
-            #     model="gpt-5.6-luna",
-            #     input="Quanto é 15 vezes 7?",
-            #     tools=openai_tools
-            # )
-
             response = openai_client.responses.create(
                 model="gpt-5.6-luna",
-                input="Quanto é 15 mais 7?",
+                input="Quanto é 15 vezes 7?",
                 tools=openai_tools
             )
 
-            print(response.output)
+            # response = openai_client.responses.create(
+            #     model="gpt-5.6-luna",
+            #     input="Quanto é 15 mais 7?",
+            #     tools=openai_tools
+            # )
+
+            # print(response.output)
             # ResponseFunctionToolCall(arguments='{"a":15,"b":7}', call_id='call_0kVq51Tog8kevL78pz2iDMTT', 
             # name='somar', type='function_call', id='fc_01166c0e5f2337a4006abc607dbf6087d1909b8376eaa353c6', 
             # async_=None, caller=None, namespace=None, status='completed')]
+
+            for item in response.output:
+                if item.type == "function_call":
+
+                    print("Tool escolhida:", item.name)
+                    print("Argumentos recebidos:", item.arguments)
+
+                    arguments = json.loads(item.arguments)
+                    print("Argumentos json.loads:", arguments)
+
+                    result = await session.call_tool(
+                        item.name,
+                        arguments
+                    )
+
+                    print("Resultado MCP:", result)
 
             # Executa uma tool remotamente via MCP
             resultado = await session.call_tool(
